@@ -1,0 +1,32 @@
+name: "Autonomous Task Directive"
+description: "Approved backlog task or issue for autonomous agent implementation"
+title: "[TASK]: "
+labels: ["agent:ready", "automated"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out this directive for autonomous agent execution.
+  - type: input
+    id: task_id
+    attributes:
+      label: Task Identifier
+      placeholder: "e.g., TASK-204"
+    validations:
+      required: true
+  - type: textarea
+    id: target_files
+    attributes:
+      label: Target Files and Repositories
+      description: List all files expected to be touched.
+      placeholder: |
+        repos/codeme-community/src/...
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria & Gate Requirements
+      description: Specific criteria that must pass the 4 engines.
+    validations:
+      required: true

@@ -1,0 +1,35 @@
+name: Reusable Codeme Verification Gate
+
+on:
+  workflow_call:
+    inputs:
+      target-repo:
+        required: true
+        type: string
+
+jobs:
+  verification-gate:
+    name: 4-Engine Verification Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Codeme Core & Community
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e repos/codeme-community
+          pip install -e repos/codeme-agent-skills
+
+      - name: Repository Routing & Boundary Check
+        run: |
+          codeme-router $(git diff --name-only origin/main...HEAD)
+
+      - name: Execute Deterministic Fix Loop
+        run: |
+          codeme-skills fix-loop --repo "${{ inputs.target-repo }}" --verbose
